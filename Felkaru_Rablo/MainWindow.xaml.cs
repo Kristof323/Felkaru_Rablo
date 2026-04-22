@@ -10,7 +10,7 @@ namespace Felkaru_Rabló
 {
     public partial class MainWindow : Window
     {
-        private const int SYMBOLS_PER_REEL = 4;
+        private const int SYMBOLS_PER_REEL = 4; //Ezt kell valtoztatni 18 a max
 
         private static readonly string[] ALL_SYMBOLS = new string[]
         {
@@ -225,7 +225,6 @@ namespace Felkaru_Rabló
             SpinButton.IsEnabled = true;
             _totalSpins++;
 
-            // Commit 4-ben jön a kiértékelés
             ResultText.Text = "Megállt!";
             UpdateUI();
         }
