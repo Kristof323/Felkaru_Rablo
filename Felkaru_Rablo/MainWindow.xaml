@@ -4,9 +4,182 @@
         Title="Félkarú Rabló" Height="680" Width="560"
         Background="#1a1a2e" ResizeMode="CanMinimize"
         WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <Style x:Key="BigButton" TargetType="Button">
+            <Setter Property="Background" Value="#e94560"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="10"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#c73652"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#555"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ReelBorder" TargetType="Border">
+            <Setter Property="Background" Value="#16213e"/>
+            <Setter Property="BorderBrush" Value="#e94560"/>
+            <Setter Property="BorderThickness" Value="3"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="Height" Value="260"/>
+            <Setter Property="ClipToBounds" Value="True"/>
+        </Style>
+    </Window.Resources>
+
     <Grid>
-        <TextBlock Text="FÉLKARÚ RABLÓ"
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="FÉLKARÚ RABLÓ"
                    Foreground="#e94560" FontSize="28" FontWeight="Bold"
-                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                   HorizontalAlignment="Center" Margin="0,20,0,10"/>
+        
+        <StackPanel Grid.Row="1" Orientation="Horizontal"
+                    HorizontalAlignment="Center" Margin="0,5,0,10">
+            <Border Background="#16213e" BorderBrush="#e94560"
+                    BorderThickness="2" CornerRadius="8" Padding="15,8" Margin="5">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Egyenleg: " Foreground="#aaa" FontSize="16"/>
+                    <TextBlock x:Name="BalanceText" Text="100"
+                               Foreground="#ffd700" FontSize="16" FontWeight="Bold"/>
+                    <TextBlock Text=" kredit" Foreground="#aaa" FontSize="16"/>
+                </StackPanel>
+            </Border>
+
+            <Border Background="#16213e" BorderBrush="#e94560"
+                    BorderThickness="2" CornerRadius="8" Padding="10,5" Margin="5">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Tet: " Foreground="#aaa"
+                               FontSize="14" VerticalAlignment="Center"/>
+                    <ComboBox x:Name="BetComboBox" Width="80" FontSize="14"
+                              SelectionChanged="BetComboBox_SelectionChanged">
+                        <ComboBoxItem Content="10" IsSelected="True"/>
+                        <ComboBoxItem Content="20"/>
+                        <ComboBoxItem Content="50"/>
+                    </ComboBox>
+                    <TextBlock Text=" kredit" Foreground="#aaa"
+                               FontSize="14" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+        
+        <Grid Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Style="{StaticResource ReelBorder}" Margin="8,0">
+                <Canvas x:Name="Reel1Canvas" Width="114" Height="260"/>
+            </Border>
+
+            <Border Grid.Column="1" Style="{StaticResource ReelBorder}" Margin="8,0">
+                <Canvas x:Name="Reel2Canvas" Width="114" Height="260"/>
+            </Border>
+
+            <Border Grid.Column="2" Style="{StaticResource ReelBorder}" Margin="8,0">
+                <Canvas x:Name="Reel3Canvas" Width="114" Height="260"/>
+            </Border>
+            
+            <Rectangle Grid.Column="0" Grid.ColumnSpan="3"
+                       Height="4" VerticalAlignment="Center"
+                       Fill="#e94560" Opacity="0.8"
+                       IsHitTestVisible="False"/>
+        </Grid>
+
+        
+        <Border Grid.Row="3" Margin="20,8" Padding="15,8"
+                CornerRadius="10" HorizontalAlignment="Center">
+            <Border.Background>
+                <SolidColorBrush x:Name="ResultBackground" Color="#16213e"/>
+            </Border.Background>
+            <TextBlock x:Name="ResultText"
+                       Text="Nyomj PORGETÉS-t a kezdéshez!"
+                       Foreground="White" FontSize="18" FontWeight="Bold"
+                       HorizontalAlignment="Center"/>
+        </Border>
+
+        
+        <StackPanel Grid.Row="4" Orientation="Horizontal"
+                    HorizontalAlignment="Center" Margin="0,5,0,10">
+            <Button x:Name="SpinButton"
+                    Content="PÖRGETÉS"
+                    Style="{StaticResource BigButton}"
+                    Margin="10,0"
+                    Click="SpinButton_Click"/>
+            <Button Content="Reset"
+                    Style="{StaticResource BigButton}"
+                    Background="#0f3460"
+                    Margin="10,0"
+                    Click="ResetButton_Click"/>
+        </StackPanel>
+
+        <Border Grid.Row="5" Background="#16213e" BorderBrush="#333"
+                BorderThickness="0,1,0,0" Padding="15,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                    <TextBlock Text="Pörgetések" Foreground="#888" FontSize="11" HorizontalAlignment="Center"/>
+                    <TextBlock x:Name="StatSpins" Text="0"
+                               Foreground="White" FontSize="18" FontWeight="Bold"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                    <TextBlock Text="Nyerések" Foreground="#888" FontSize="11" HorizontalAlignment="Center"/>
+                    <TextBlock x:Name="StatWins" Text="0"
+                               Foreground="#4ecca3" FontSize="18" FontWeight="Bold"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" HorizontalAlignment="Center">
+                    <TextBlock Text="Veszítések" Foreground="#888" FontSize="11" HorizontalAlignment="Center"/>
+                    <TextBlock x:Name="StatLosses" Text="0"
+                               Foreground="#e94560" FontSize="18" FontWeight="Bold"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="3" HorizontalAlignment="Center">
+                    <TextBlock Text="Nyerési arány" Foreground="#888" FontSize="11" HorizontalAlignment="Center"/>
+                    <TextBlock x:Name="StatWinRate" Text="0%"
+                               Foreground="#ffd700" FontSize="18" FontWeight="Bold"
+                               HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+        </Border>
     </Grid>
 </Window>
